@@ -4,6 +4,8 @@ var uiController = (function () {
     inputDescription: ".add__description",
     inputValue: ".add__value",
     addBtn: ".add__btn",
+    incomList: ".income__list",
+    expenseList: ".expenses__list",
   };
   return {
     getInput() {
@@ -16,17 +18,32 @@ var uiController = (function () {
     getDomstrings: function () {
       return DOMstrings;
     },
+    clearFields: function () {
+      var fields = document.querySelectorAll(
+        DOMstrings.inputDescription + ", " + DOMstrings.inputValue
+      );
+      // Conver list to array
+      var fieldsArr = Array.prototype.slice.call(fields);
+      // for (i = 0; i < fields.length; i++) {
+      //   fieldsArr[i].value = "";
+      // }
+      fieldsArr.forEach(function (el, index, array) {
+        el.value = "";
+      });
+      fieldsArr[0].focus();
+    },
     addListItem: function (item, type) {
       // Orloga zarlagiin elementiig agulsan Html beltegene
       var html, list;
       if (type === "inc") {
-        list = ".income__list";
+        list = DOMstrings.incomList;
         html =
           '<div class="item clearfix" id="income-%ID%"><div class="item__description">%DESC%</div><div class="right clearfix"><div class="item__value">%VAL%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
       } else {
-        list = ".expense__list";
+        list = DOMstrings.expenseList;
         html =
-          '   <div class="item clearfix" id="expense-%ID%"><div class="item__description">%DESC%</div><div class="right clearfix"><div class="item__value">- %VAL%</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+          '<div class="item clearfix" id="expense-%ID%"><div class="item__description">%DESC%</div><div class="right clearfix"><div class="item__value">%VAL%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+        // '   <div class="item clearfix" id="expense-%ID%"><div class="item__description">%DESC%</div><div class="right clearfix"><div class="item__value">- %VAL%</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
       }
       //Ter html er orson utagiig replace hiij solij ugnu
       html = html.replace("%ID%", item.id);
@@ -98,6 +115,7 @@ var appController = (function (uiController, financeController) {
     //3/olj avsan ugduluudee web iiin ali hesegt tavih gargan
 
     uiController.addListItem(item, input.type);
+    uiController.clearFields();
   };
 
   //4/tusuviin tootsoog gargana
